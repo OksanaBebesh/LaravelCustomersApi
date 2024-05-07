@@ -16,7 +16,7 @@
         </style>
     </head>
     <body class="antialiased">
-    <a href="/api"
+    <a href="{{route('customers.index')}}"
        class="btn btn-primary btn-sm">CRUD Customers</a>
     </body>
 </html>
