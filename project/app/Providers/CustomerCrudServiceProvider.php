@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use CustomerServiceInterface;
-use DbCustomerService;
+//use CustomerServiceInterface;
+//use DbCustomerService;
+use App\Interfaces\CustomerServiceInterface;
+use App\Services\DbCustomerService;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 

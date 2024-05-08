@@ -1,31 +1,47 @@
 <?php
+namespace App\Services;
 
+use App\Interfaces\CustomerServiceInterface;
 use App\Models\Customer;
 
 class DbCustomerService implements CustomerServiceInterface{
 
-    public function getAllData()
+    public function getAll()
     {
         return Customer::all();
     }
 
-    public function store(array $data){
+    public function store(array $data)
+    {
         return Customer::create($data);
     }
 
-    public function show(string $id, array $data) {
+    public function show(string $id)
+    {
         return Customer::find($id);
     }
 
-    public function update(array $data, Customer $customer){
-        return $customer->update($data);
+    public function update(array $updatedCustomer, string $id): bool
+    {
+        $customer = Customer::find($id);
+
+        return $customer->update($updatedCustomer);
     }
 
-    public function delete(Customer $customer){
-        return $customer->delete();
+    public function delete(string $id): bool
+    {
+        $customer = Customer::find($id);
+
+        if ($customer !== null) {
+            $customer->delete();
+            return true;
+        }
+
+        return false;
     }
 
-    public function edit(string $id) {
+    public function edit(string $id)
+    {
         return $this->show($id);
     }
 }

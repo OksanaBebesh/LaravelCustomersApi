@@ -3,56 +3,64 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CustomerServiceInterface;
 use App\Models\Customer;
-use CustomerServiceInterface;
 use Illuminate\Http\Request;
 
 class CustomersController extends Controller
 {
+    private CustomerServiceInterface $customerService;
 
-    public function index(CustomerServiceInterface $customerService) //
+    function __construct(CustomerServiceInterface $customerService)
     {
-        $customers = $customerService->getAll();
+        $this->customerService = $customerService;
+    }
+
+    public function index() //
+    {
+        $customers = $this->customerService->getAll();
         return response()->json($customers, 200);
     }
 
-    public function store(Request $request, CustomerServiceInterface $customerService): \Illuminate\Http\JsonResponse
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'name' => 'required|max:50',
             'email' => 'required|max:50',
         ]);
 
-        $customer = $customerService->storeData($request->all());
+        $customer = $this->customerService->store($request->all());
 
         return response()->json($customer, 201);
     }
 
-    public function show(int $id, CustomerServiceInterface $customerService): \Illuminate\Http\JsonResponse
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
-        $customer = $customerService->show($id);
+        $customer = $this->customerService->show($id);
 
         return response()->json($customer);
     }
 
-    public function update(Request $request, Customer $customer, CustomerServiceInterface $customerService): \Illuminate\Http\JsonResponse
+    public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
-        $customer->update($request->all());
+        $result = $this->customerService->update($request->all(), $id);
 
-        return response()->json($customer);
+        return response()->json($result);
     }
 
-    public function destroy(Customer $customer, CustomerServiceInterface $customerService): \Illuminate\Http\JsonResponse
+    public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        if ($customerService->delete()) {
+        if ($this->customerService->delete($id)) {
             return response()->json([], 204);
         }
-        return response()->json(false, 204);
 
+        return response()->json(false, 204);
     }
 
-    public function edit(int $id, CustomerServiceInterface $customerService): \Illuminate\Http\JsonResponse
+    public function edit(int $id): \Illuminate\Http\JsonResponse
     {
-        return $customerService->show($id);
+        $customer = $this->customerService->show($id);
+
+        return response()->json($customer);
     }
 }
