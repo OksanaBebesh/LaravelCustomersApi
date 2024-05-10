@@ -11,7 +11,7 @@ class DbCustomerService implements CustomerServiceInterface{
         return Customer::all();
     }
 
-    public function store(array $data)
+    public function store(array $data): Customer
     {
         return Customer::create($data);
     }

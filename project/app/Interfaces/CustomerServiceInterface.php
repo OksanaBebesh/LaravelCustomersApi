@@ -7,7 +7,7 @@ interface CustomerServiceInterface
 {
     public function getAll();
 
-    public function store(array $data);
+    public function store(array $data): Customer;
 
     public function show(string $id);
 

@@ -16,7 +16,7 @@ class CustomersController extends Controller
         $this->customerService = $customerService;
     }
 
-    public function index() //
+    public function index(): \Illuminate\Http\JsonResponse //
     {
         $customers = $this->customerService->getAll();
         return response()->json($customers, 200);
