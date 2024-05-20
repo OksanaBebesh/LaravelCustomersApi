@@ -24,12 +24,9 @@ class CustomersController extends Controller
 
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        $request->validate([
-            'name' => 'required|max:50',
-            'email' => 'required|max:50',
-        ]);
+        $validated = $request->validate(Customer::rules());
 
-        $customer = $this->customerService->store($request->all());
+        $customer = $this->customerService->store($validated);
 
         return response()->json($customer, 201);
     }
@@ -43,7 +40,8 @@ class CustomersController extends Controller
 
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
-        $result = $this->customerService->update($request->all(), $id);
+        $validated = $request->validate(Customer::rules());
+        $result = $this->customerService->update($validated, $id);
 
         return response()->json($result);
     }
