@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Rules\EmailDomainRequestRule;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ class Customer extends Model
     {
         return [
             'name' => 'required|string|max:50',
-            'email' => 'required|email|unique:customers,email' . ($id ? ",$id" : ''),
+            'email' => ['required', 'email', new EmailDomainRequestRule()],
         ];
     }
 }
